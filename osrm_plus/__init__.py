@@ -13,24 +13,27 @@ def main():
         "67.5304,31.95617",
         "67.63406,33.14132"
     ]
-    route_info = distances_and_durations(test_coordinates)
+    route_info = distances_and_durations(test_coordinates, include_speed=True)
     distances = route_info['distances']
     durations = route_info['durations']
+    speeds = route_info['speeds']
 
     print("Distance matrix: \n\t{}".format(distances))
     print("Duration matrix: \n\t{}".format(durations))
-    print("Speed matrix (m/s): \n\t{}".format(distances/(durations+np.finfo(np.float32).eps)))
-    print("Speed matrix (km/h): \n\t{}".format(distances/(durations+np.finfo(np.float32).eps)*((60*60)/1000)))
+    print("Speed matrix (m/s): \n\t{}".format(speeds))
+    print("Speed matrix (km/h): \n\t{}".format(speeds*((60*60)/1000)))
 
-def distances_and_durations(coordinates, osrm_route_service=None):
+def distances_and_durations(coordinates, osrm_route_service=None, include_speed=False):
     if len(coordinates) > 15:
         raise ValueError("The service currently support 15 coordinates at most.")
     if osrm_route_service is None:
         osrm_route_service = __osrm_route_service
+
     sample_size = len(coordinates)
     eulerian_tour = clique_tour.build(sample_size)
     fake_route = ";".join([ coordinates[i] for i in eulerian_tour ])
     address = osrm_route_service + fake_route
+
     r = requests.get(address, params={}, timeout=None)
     data = json.loads(r.text)
     if data['code'] == "Ok":
@@ -50,7 +53,11 @@ def distances_and_durations(coordinates, osrm_route_service=None):
             durations[u,v] =  eulerian_tour_durations[i]
             durations[v,u] =  eulerian_tour_durations[i]
 
-    return {'durations':durations, 'distances':distances}
+    response = { 'durations':durations, 'distances':distances }
+    if include_speed:
+        response['speeds'] = distances/(durations+np.finfo(np.float32).eps)
+
+    return response
 
 if __name__ == "__main__":
     main()
