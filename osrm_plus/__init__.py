@@ -23,6 +23,8 @@ def main():
     print("Speed matrix (km/h): \n\t{}".format(distances/(durations+np.finfo(np.float32).eps)*((60*60)/1000)))
 
 def distances_and_durations(coordinates, osrm_route_service=None):
+    if len(coordinates) > 15:
+        raise ValueError("The service currently support 15 coordinates at most.")
     if osrm_route_service is None:
         osrm_route_service = __osrm_route_service
     sample_size = len(coordinates)
