@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='osrm_plus',
-      version='0.21',
+      version='0.22',
       description='Allow to retrieve both distance and duration matrix for an input list of OSRM coordinates.',
       url='https://github.com/cglacet/osrm_plus',
       author='Christian Glacet',
