@@ -19,6 +19,7 @@ def main():
 
     print("Distance matrix: \n\t{}".format(distances))
     print("Duration matrix: \n\t{}".format(durations))
+    print("Speed matrix (m/s): \n\t{}".format(distances/(durations+np.finfo(np.float32).eps)))
     print("Speed matrix (km/h): \n\t{}".format(distances/(durations+np.finfo(np.float32).eps)*((60*60)/1000)))
 
 def distances_and_durations(coordinates, osrm_route_service=None):
