@@ -58,8 +58,10 @@ def distances_and_durations(coordinates, osrm_route_service=None, include_speed=
             response['speeds'] = distances/(durations+np.finfo(np.float32).eps)
 
         return response
+    if data['code'] == "NoRoute":
+        raise requests.exceptions.RequestException("No route for these coordinates, distances and durations matrices can't be retrieved from OSRM.")
 
-    return None
+    raise requests.exceptions.RequestException(data)
 
 if __name__ == "__main__":
     main()
