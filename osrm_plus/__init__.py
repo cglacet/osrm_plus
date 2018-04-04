@@ -42,8 +42,8 @@ def distances_and_durations(coordinates, osrm_route_service=None, include_speed=
         eulerian_tour_distances = [ leg["distance"] for leg in legs]
         eulerian_tour_durations = [ leg["duration"] for leg in legs]
 
-        distances = np.zeros((sample_size,sample_size))
-        durations = np.zeros((sample_size,sample_size))
+        distances = np.matrix(np.zeros((sample_size,sample_size)))
+        durations = np.matrix(np.zeros((sample_size,sample_size)))
         for i in range(len(eulerian_tour)-1):
             u = eulerian_tour[i+1]
             v = eulerian_tour[i]
