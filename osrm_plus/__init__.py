@@ -53,11 +53,13 @@ def distances_and_durations(coordinates, osrm_route_service=None, include_speed=
             durations[u,v] =  eulerian_tour_durations[i]
             durations[v,u] =  eulerian_tour_durations[i]
 
-    response = { 'durations':durations, 'distances':distances }
-    if include_speed:
-        response['speeds'] = distances/(durations+np.finfo(np.float32).eps)
+        response = { 'durations':durations, 'distances':distances }
+        if include_speed:
+            response['speeds'] = distances/(durations+np.finfo(np.float32).eps)
 
-    return response
+        return response
+
+    return None
 
 if __name__ == "__main__":
     main()
