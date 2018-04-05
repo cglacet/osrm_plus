@@ -45,7 +45,7 @@ def distances_and_durations(coordinates, osrm_route_service=None, include_speed=
     fake_route = ";".join([ coordinates[i] for i in eulerian_tour ])
     address = osrm_route_service + fake_route
 
-    r = requests.get(address, params={''}, timeout=None)
+    r = requests.get(address, params=osrm_options, timeout=None)
     data = json.loads(r.text)
     if data['code'] == "Ok":
         route = data["routes"][0]
