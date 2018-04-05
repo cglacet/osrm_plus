@@ -2,6 +2,11 @@ import clique_tour, requests, json
 import numpy as np
 
 __osrm_route_service = "http://router.project-osrm.org/route/v1/driving/"
+__osrm_default_options = {
+    # https://github.com/Project-OSRM/osrm-backend/issues/1353#issuecomment-378654152
+    'continue_straight':'false',
+    'overview':'false'
+}
 
 def main():
     test_coordinates = [
@@ -23,18 +28,24 @@ def main():
     print("Speed matrix (m/s): \n\t{}".format(speeds))
     print("Speed matrix (km/h): \n\t{}".format(speeds*((60*60)/1000)))
 
-def distances_and_durations(coordinates, osrm_route_service=None, include_speed=False):
+def distances_and_durations(coordinates, osrm_route_service=None, include_speed=False, osrm_options=None):
     if len(coordinates) > 15:
         raise ValueError("The service currently support 15 coordinates at most.")
     if osrm_route_service is None:
         osrm_route_service = __osrm_route_service
+    if osrm_options is None:
+        osrm_options = __osrm_default_options
+    else:
+        for k,v in __osrm_default_options.items():
+            if k not in osrm_options:
+                osrm_options[k] = v
 
     sample_size = len(coordinates)
     eulerian_tour = clique_tour.build(sample_size)
     fake_route = ";".join([ coordinates[i] for i in eulerian_tour ])
     address = osrm_route_service + fake_route
 
-    r = requests.get(address, params={}, timeout=None)
+    r = requests.get(address, params={''}, timeout=None)
     data = json.loads(r.text)
     if data['code'] == "Ok":
         route = data["routes"][0]
