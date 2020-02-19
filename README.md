@@ -1,6 +1,6 @@
 # OSRM distance and duration matrices service
 
-Returns an object containing numpy matrices for distance and duration from an OSRM server giving an input list of OSRM coordinates.
+Returns an object containing numpy matrices for distance and duration from an OSRM server giving an input list of OSRM coordinates. This was made after [this discussion](https://github.com/Project-OSRM/osrm-backend/issues/1353#issuecomment-378575752)
 
 ### Installation
 ```bash
